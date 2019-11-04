@@ -10,10 +10,12 @@
 // let name = prompt("What is your summoner name?", "Majestic Moose");
 
 
-let region = ["na1."];
-let url = "api.riotgames.com/";
-let api = 'https://cors-anywhere.herokuapp.com/https://na1.api.riotgames.com/lol/';
+let regionList = ['na1.', 'euw1.', 'eun1.'];
+var regionSelected;
+const url = 'api.riotgames.com/lol/';
+const proxeurl = 'https://cors-anywhere.herokuapp.com/https://';
 let api_summ = 'summoner/v4/summoners/by-name/';
+let api_match = 'match/v4/matchlists/by-account/';
 let api_key = '?api_key=RGAPI-0b418aab-3eb7-4561-8f34-b2beb4c37562';
 let accountID;
 
@@ -24,21 +26,79 @@ let accountID;
 
 
 function getLeagueData() {
+
+    var region = document.getElementsByName('region');
+    for(var i = 0, length = region.length; i < length; i++){
+        if(region[i].checked)
+            regionSelected = regionList[i];
+    }
+    
     let inputField = document.getElementById('input');
     console.log(inputField);
     let name = inputField.value;
     console.log("name = ", name);
 
-    axios.get(api + api_summ + name + api_key)
-    .then(function(response){
-        console.log('Success: ' + response.data.id);
-        printData(response.data);
+    axios.get(proxeurl + regionSelected + url + api_summ + name + api_key)
+    .then(function(received){
 
-        // Prints the data to the HTML
+        /*
+        profileIconId	int	ID of the summoner icon associated with the summoner.
+        name	string	Summoner name.
+        puuid	string	Encrypted PUUID. Exact length of 78 characters.
+        summonerLevel	long	Summoner level associated with the summoner.
+        revisionDate	long	Date summoner was last modified specified as epoch milliseconds. The following events will update this timestamp: profile icon change, playing the tutorial or advanced tutorial, finishing a game, summoner name change
+        id	string	Encrypted summoner ID. Max length 63 characters.
+        accountId	string	Encrypted account ID. Max length 56 characters. 
+        */
+
+        var summoner = {
+            name: received.data.name,
+            puuid: received.data.puuid,
+            summonerLvl: received.data.summonerLevel,
+            revisionDate: received.data.revisionDate,
+            id: received.data.id,
+            accountId: received.data.accountId
+        };
+
+        console.log('Success: ' + summoner.name + ' info recieved.');
+        printData(summoner);
+        gameList(summoner.accountId);
         
     })
     .catch(function(err){
         console.log('Failed: ' + err);
+        alert('Failed to get data: ' + err);
+    });
+}
+
+function gameList(acctId){
+    var region = document.getElementsByName('region');
+    for(var i = 0, length = region.length; i < length; i++){
+        if(region[i].checked)
+            regionSelected = regionList[i];
+    }
+
+    axios.get(proxeurl + regionSelected + url + api_match + acctId + api_key)
+    .then(function(received){
+
+        /*
+        lane	string	
+        gameId	long	
+        champion	int	
+        platformId	string	
+        season	int	
+        queue	int	
+        role	string	
+        timestamp	long
+        */
+
+        var obj = JSON.stringify(received.data, indefined, 2);
+        document.getElementById('match-hist').innerText = obj;
+        
+    })
+    .catch(function(err){
+        console.log('Failed: ' + err);
+        alert('Failed to get data: ' + err);
     });
 }
 
@@ -46,9 +106,15 @@ function printData(input){
     let idValueField = document.getElementById('id-value');
     console.log(idValueField);
     idValueField.innerText = input.id;
+
     let acctNameValueField = document.getElementById('name-value');
     console.log(acctNameValueField);
-    acctNameValueField.innerText = input.name;
+    acctNameValueField.innerText = input.name;    
+
+    let acctIdValueField = document.getElementById('acctId-value');
+    console.log(acctIdValueField);
+    acctIdValueField.innerText = input.accountId; 
+    
 }
 
 

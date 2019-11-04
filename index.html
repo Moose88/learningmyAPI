@@ -14,30 +14,17 @@
 </head>
 
 <body>
-
     <div class="league-container">
+        Region: <input type="radio" name="region" value="0" checked>NA <input type="radio" name="region" value="1">EUW <input type="radio" name="region" value="2">EUN<br>
         Summoner Name: <input id="input" value="Majestic Moose"></input>
     </br>
         <button id="submit" onclick="getLeagueData()">Submit</button>
     </div>
     <span>Id : <span id="id-value"></span></span><br>
-    <span>Name: <span id="name-value"></span></span>
+    <span>Name: <span id="name-value"></span></span><br>
+    <span>Acct ID: <span id="acctId-value"></span></span><br>
+
+    Match history: <pre id='match-hist'></pre>
 </body>
 
 </html>
-
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-    <h1>Hello World</h1>
-    <script src="script.js">
-        
-    </script>
-</body>
-</html> -->
