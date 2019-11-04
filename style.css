@@ -20,3 +20,11 @@
     margin: 0;
     font-weight: bold;
 }
+
+#id-value {
+    color: red;
+}
+
+#name-value{
+    color: green;
+}

@@ -5,33 +5,52 @@
 // .then(contents => console.log(contents))
 // .catch(() => console.log("Can’t access " + url + " response. Blocked by browser?"))
 
-//var name = prompt("What is your summoner name?", "Majestic Moose");
-// var api = 'https://cors-anywhere.herokuapp.com/https://na1.api.riotgames.com/lol/';
-// var api_summ = 'summoner/v4/summoners/by-name/';
-// var api_key = '?api_key=RGAPI-9d50dff2-5141-4f69-9633-b16cd6a9d89d';
-// var accountID;
-
-// $.getJSON(url + "summoner/v4/summoners/by-name/" + name + "?api_key=RGAPI-9d50dff2-5141-4f69-9633-b16cd6a9d89d", function(data){
-
-    // let summonerInfo = {
-    //     summoner_name: data.name,
-    //     summoner_level: data.summonerLevel,
-    //     accountID: data.accountId;
-    // };
-
-//     console.log(data);
-
-//     var summoner_name = data.name;
-//     var summoner_level = data.summonerLevel;
-//     accountID = data.accountId;
-
-//     $(".summoner_name").append(summoner_name);
-//     $(".summoner_level").append(summoner_level);
-
-//     console.log(accountID);
 
 
-// });
+// let name = prompt("What is your summoner name?", "Majestic Moose");
+
+
+let region = ["na1."];
+let url = "api.riotgames.com/";
+let api = 'https://cors-anywhere.herokuapp.com/https://na1.api.riotgames.com/lol/';
+let api_summ = 'summoner/v4/summoners/by-name/';
+let api_key = '?api_key=RGAPI-0b418aab-3eb7-4561-8f34-b2beb4c37562';
+let accountID;
+
+
+// clickButton = (event) => {
+
+// };
+
+
+function getLeagueData() {
+    let inputField = document.getElementById('input');
+    console.log(inputField);
+    let name = inputField.value;
+    console.log("name = ", name);
+
+    axios.get(api + api_summ + name + api_key)
+    .then(function(response){
+        console.log('Success: ' + response.data.id);
+        printData(response.data);
+
+        // Prints the data to the HTML
+        
+    })
+    .catch(function(err){
+        console.log('Failed: ' + err);
+    });
+}
+
+function printData(input){
+    let idValueField = document.getElementById('id-value');
+    console.log(idValueField);
+    idValueField.innerText = input.id;
+    let acctNameValueField = document.getElementById('name-value');
+    console.log(acctNameValueField);
+    acctNameValueField.innerText = input.name;
+}
+
 
 
 // function setup(){

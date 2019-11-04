@@ -1,4 +1,4 @@
-<!-- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Test API</title>
 
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     
     <script src="script.js"></script>
     <link rel="stylesheet" href="style.css">
@@ -16,32 +16,17 @@
 <body>
 
     <div class="league-container">
-
-        Summoner Name: <input id = "summoner_name" value = "Majestic Moose"></input>
+        Summoner Name: <input id="input" value="Majestic Moose"></input>
     </br>
-
-        <button id = "submit">Submit</button>
-
-        <img class="icon">
-        <p class="summoner_name">
-
-        </p>
-        <p class="summoner_level">
-
-            
-        </p>
-
-        <p class="entries">
-
-
-        </p>
+        <button id="submit" onclick="getLeagueData()">Submit</button>
     </div>
-
+    <span>Id : <span id="id-value"></span></span><br>
+    <span>Name: <span id="name-value"></span></span>
 </body>
 
-</html> -->
+</html>
 
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -55,4 +40,4 @@
         
     </script>
 </body>
-</html>
+</html> -->
