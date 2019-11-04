@@ -12,10 +12,15 @@
 
 let regionList = ['na1.', 'euw1.', 'eun1.'];
 var regionSelected;
-const url = 'api.riotgames.com/lol/';
+var summoner;
+var latestMatchInformation;
+var participationInformation;
+const url = 'api.riotgames.com';
 const proxeurl = 'https://cors-anywhere.herokuapp.com/https://';
-let api_summ = 'summoner/v4/summoners/by-name/';
-let api_match = 'match/v4/matchlists/by-account/';
+let api_summ = '/lol/summoner/v4/summoners/by-name/';
+let api_match = '/lol/match/v4/matchlists/by-account/';
+let api_matches = '/lol/match/v4/matches/';
+let api_timeline = '/lol/match/v4/timelines/by-match/';
 let api_key = '?api_key=RGAPI-0b418aab-3eb7-4561-8f34-b2beb4c37562';
 let accountID;
 
@@ -51,7 +56,7 @@ function getLeagueData() {
         accountId	string	Encrypted account ID. Max length 56 characters. 
         */
 
-        var summoner = {
+        summoner = {
             name: received.data.name,
             puuid: received.data.puuid,
             summonerLvl: received.data.summonerLevel,
@@ -72,11 +77,6 @@ function getLeagueData() {
 }
 
 function gameList(acctId){
-    var region = document.getElementsByName('region');
-    for(var i = 0, length = region.length; i < length; i++){
-        if(region[i].checked)
-            regionSelected = regionList[i];
-    }
 
     axios.get(proxeurl + regionSelected + url + api_match + acctId + api_key)
     .then(function(received){
@@ -91,10 +91,99 @@ function gameList(acctId){
         role	string	
         timestamp	long
         */
-        console.log(received.data.matches);
-        var obj = JSON.stringify(received.data.matches, undefined, 2);
+        console.log(received.data.matches[0]);
+        var obj = JSON.stringify(received.data.matches[0], undefined, 2);
         document.getElementById('match-hist').innerText = obj;
         
+        console.log();
+
+        latestMatchInformation = {
+            platformId: received.data.matches[0].platformId,
+            gameId: received.data.matches[0].gameId,
+            champion: received.data.matches[0].champion,
+            queue: received.data.matches[0].queue,
+            season: received.data.matches[0].season,
+            timestamp: received.data.matches[0].timestamp,
+            role: received.data.matches[0].role,
+            lane: received.data.matches[0].lane
+        };
+
+        if(latestMatchInformation.role != "JUNGLE")
+            alert("You're not the jungler!");
+        
+        printGameInfo(latestMatchInformation);
+
+        getSummonerMatchInfo(latestMatchInformation);
+    })
+    .catch(function(err){
+        console.log('Failed: ' + err);
+        alert('Failed to get data: ' + err);
+    });
+}
+
+    /*
+    seasonId	int	Please refer to the Game Constants documentation.
+    queueId	int	Please refer to the Game Constants documentation.
+    gameId	long	
+    participantIdentities	List[ParticipantIdentityDto]	Participant identity information.
+    gameVersion	string	The major.minor version typically indicates the patch the match was played on.
+    platformId	string	Platform where the match was played.
+    gameMode	string	Please refer to the Game Constants documentation.
+    mapId	int	Please refer to the Game Constants documentation.
+    gameType	string	Please refer to the Game Constants documentation.
+    teams	List[TeamStatsDto]	Team information.
+    participants	List[ParticipantDto]	Participant information.
+    gameDuration	long	Match duration in seconds.
+    gameCreation	long	Designates the timestamp when champion select ended and the loading screen appeared, NOT when the game timer was at 0:00.
+    */
+
+function getSummonerMatchInfo(latestMatchInformation){
+
+    axios.get(proxeurl + regionSelected + url + api_matches + latestMatchInformation.gameId + api_key)
+    .then(function(received){
+        console.log(received.data);
+
+        participationInformation = {
+            gameId: received.data.gameId,
+            platformId: received.data.platformId,
+            gameCreation: received.data.gameCreation,
+            gameDuration: received.data.gameDuration,
+            queueId: received.data.queueId,
+            mapId: received.data.mapId,
+            seasonId: received.data.seasonId,
+            gameVersion: received.data.gameVersion,
+            gameMode: received.data.gameMode,
+            teams: received.data.teams,
+            participants: received.data.participants,
+            participantIdentities: received.data.participantIdentities
+        };
+
+        for(var i = 0; i < participationInformation.participantIdentities.length; i++){
+            if(participationInformation.participantIdentities[i].player.accountId == summoner.accountId){
+                let winloseVal = document.getElementById('winlose');
+                if(participationInformation.participants[i].stats.win)
+                    winloseVal.innerText = 'You won!';
+                else
+                    winloseVal.innerText = 'You lost...';
+                let killsVal = document.getElementById('kills');
+                killsVal.innerText = participationInformation.participants[i].stats.kills;
+                timelineCall(participationInformation.participantIdentities[i].participantId, participationInformation.gameId);
+            
+            }
+        }
+        
+    })
+    .catch(function(err){
+        console.log('Failed: ' + err);
+        alert('Failed to get data: ' + err);
+    });
+}
+
+function timelineCall(participantId, gameId){
+
+    axios.get(proxeurl + regionSelected + url + api_timeline + gameId + api_key)
+    .then(function(timeline){
+        console.log(timeline.data);
     })
     .catch(function(err){
         console.log('Failed: ' + err);
@@ -117,7 +206,11 @@ function printData(input){
     
 }
 
-
+function printGameInfo(input){
+    console.log(input);
+    let gameIdField = document.getElementById('game-value');
+    gameIdField.innerText = input.gameId;
+}
 
 // function setup(){
 
