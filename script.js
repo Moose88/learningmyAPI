@@ -91,8 +91,8 @@ function gameList(acctId){
         role	string	
         timestamp	long
         */
-
-        var obj = JSON.stringify(received.data, indefined, 2);
+        console.log(received.data.matches);
+        var obj = JSON.stringify(received.data.matches, undefined, 2);
         document.getElementById('match-hist').innerText = obj;
         
     })
