@@ -28,3 +28,20 @@
 #name-value{
     color: green;
 }
+
+#kills{
+    color: green;
+}
+
+#deaths{
+    color: red;
+
+}
+
+#assists{
+    color: blue;
+}
+
+#kda{
+    color: purple;
+}

@@ -21,7 +21,7 @@ let api_summ = '/lol/summoner/v4/summoners/by-name/';
 let api_match = '/lol/match/v4/matchlists/by-account/';
 let api_matches = '/lol/match/v4/matches/';
 let api_timeline = '/lol/match/v4/timelines/by-match/';
-let api_key = '?api_key=RGAPI-0b418aab-3eb7-4561-8f34-b2beb4c37562';
+let api_key = '?api_key=RGAPI-e7d060c5-8b78-42cc-ad5d-122b939511c6';
 let accountID;
 
 
@@ -165,8 +165,10 @@ function getSummonerMatchInfo(latestMatchInformation){
                     winloseVal.innerText = 'You won!';
                 else
                     winloseVal.innerText = 'You lost...';
-                let killsVal = document.getElementById('kills');
-                killsVal.innerText = participationInformation.participants[i].stats.kills;
+                document.getElementById('kills').innerText = participationInformation.participants[i].stats.kills;
+                document.getElementById('deaths').innerText = participationInformation.participants[i].stats.deaths;
+                document.getElementById('assists').innerText = participationInformation.participants[i].stats.assists;
+                document.getElementById('kda').innerText = (participationInformation.participants[i].stats.kills + participationInformation.participants[i].stats.assists)/participationInformation.participants[i].stats.deaths;
                 timelineCall(participationInformation.participantIdentities[i].participantId, participationInformation.gameId);
             
             }
