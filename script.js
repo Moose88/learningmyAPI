@@ -10,12 +10,35 @@
 // let name = prompt("What is your summoner name?", "Majestic Moose");
 
 
-let regionList = ['na1.', 'euw1.', 'eun1.'];
+class apiBuilder{
+  constructor(region){
+    this.regionList = ['na1.', 'euw1.', 'eun1.'];
+    const api = 'api.riotgames.com';
+    const proxeurl = 'https://cors-anywhere.herokuapp.com/https://';
+    let api_summ = '/lol/summoner/v4/summoners/by-name/';
+    let api_match = '/lol/match/v4/matchlists/by-account/';
+    let api_matches = '/lol/match/v4/matches/';
+    let api_timeline = '/lol/match/v4/timelines/by-match/';
+    let api_key = '?api_key=RGAPI-e7d060c5-8b78-42cc-ad5d-122b939511c6';
+    console.log(region);
+
+    for(var i = 0, length = region.length; i < length; i++){
+      if(region[i].checked)
+          this.regionSelected = regionList[i];
+    }
+  }
+
+  summonerSearch(name){
+    return proxeurl + regionSelected + api + api_summ + name + api_key;
+  }
+}
+
+// let regionList = ['na1.', 'euw1.', 'eun1.'];
 var regionSelected;
 var summoner;
 var latestMatchInformation;
 var participationInformation;
-const url = 'api.riotgames.com';
+const api = 'api.riotgames.com';
 const proxeurl = 'https://cors-anywhere.herokuapp.com/https://';
 let api_summ = '/lol/summoner/v4/summoners/by-name/';
 let api_match = '/lol/match/v4/matchlists/by-account/';
@@ -24,26 +47,41 @@ let api_timeline = '/lol/match/v4/timelines/by-match/';
 let api_key = '?api_key=RGAPI-e7d060c5-8b78-42cc-ad5d-122b939511c6';
 let accountID;
 
+document.getElementById('inputBox').addEventListener("keydown", function(e) {
+  if (!e) { var e = window.event; }
+  e.preventDefault(); // sometimes useful
 
-// clickButton = (event) => {
+  // Enter is pressed
+  if (e.keyCode == 13) { 
+    
+    if(apiBuilder !== null)
+      apiBuilder = null;
 
-// };
+    apiBuilder = new apiBuilder(document.getElementById('region'));
+    console.log(apiBuilder.summonerSearch('Majestic Moose'));
+    //getLeagueData(); 
+  }
+}, false);
+
+document.getElementById('submit').addEventListener("mousedown", e =>{
+  if(!e){var e = window.event;}
+  e.preventDefault();
+  apiBuilder = new apiBuilder(document.getElementsByName('region'));
+
+  //getLeagueData();
+}, false);
 
 
 function getLeagueData() {
-
-    var region = document.getElementsByName('region');
-    for(var i = 0, length = region.length; i < length; i++){
-        if(region[i].checked)
-            regionSelected = regionList[i];
-    }
     
-    let inputField = document.getElementById('input');
+    let inputField = document.getElementById('inputBox');
     console.log(inputField);
     let name = inputField.value;
     console.log("name = ", name);
 
-    axios.get(proxeurl + regionSelected + url + api_summ + name + api_key)
+    console.log(apiBuilder.summonerSearch(name, regionSelected));
+
+    axios.get(proxeurl + regionSelected + api + api_summ + name + api_key)
     .then(function(received){
 
         /*
@@ -78,7 +116,7 @@ function getLeagueData() {
 
 function gameList(acctId){
 
-    axios.get(proxeurl + regionSelected + url + api_match + acctId + api_key)
+    axios.get(proxeurl + regionSelected + api + api_match + acctId + api_key)
     .then(function(received){
 
         /*
@@ -139,7 +177,7 @@ function gameList(acctId){
 
 function getSummonerMatchInfo(latestMatchInformation){
 
-    axios.get(proxeurl + regionSelected + url + api_matches + latestMatchInformation.gameId + api_key)
+    axios.get(proxeurl + regionSelected + api + api_matches + latestMatchInformation.gameId + api_key)
     .then(function(received){
         console.log(received.data);
 
@@ -183,7 +221,7 @@ function getSummonerMatchInfo(latestMatchInformation){
 
 function timelineCall(participantId, gameId){
 
-    axios.get(proxeurl + regionSelected + url + api_timeline + gameId + api_key)
+    axios.get(proxeurl + regionSelected + api + api_timeline + gameId + api_key)
     .then(function(timeline){
         console.log(timeline.data);
     })

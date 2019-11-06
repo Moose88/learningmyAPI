@@ -9,35 +9,45 @@
 
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     
-    <script src="script.js"></script>
+    
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
     <div class="league-container">
-        Region: <input type="radio" name="region" value="0" checked>NA <input type="radio" name="region" value="1">EUW <input type="radio" name="region" value="2">EUN<br>
-        Summoner Name: <input id="input" value="Majestic Moose"></input>
-    </br>
-        <button id="submit" onclick="getLeagueData()">Submit</button>
+                Region: <input type="radio" id="region" value="0" checked>NA <input type="radio" id="region" value="1">EUW <input type="radio" id="region" value="2">EUN<br>
+                Summoner Name: <input type="text" id="inputBox" value="Majestic Moose"></input></br>
+                <input type="submit" id="submit" onclick="getLeagueData()"></input>
     </div>
-    <span>Id : <span id="id-value"></span></span><br>
-    <span>Name: <span id="name-value"></span></span><br>
-    <span>Acct ID: <span id="acctId-value"></span></span><br>
+
+    <br>
+
+    <div class="acctInfo-container">
+        <span>Id : <span id="id-value"></span></span><br>
+        <span>Name: <span id="name-value"></span></span><br>
+        <span>Acct ID: <span id="acctId-value"></span></span><br>
+    </div>
+
+    <br>
 
     Match history: <pre id='match-hist'></pre>
 
     Game ID: <span id="game-value"></span><br><br><br>
 
-    <b>Your latest game information:</b><br><br>
-    <b>Win/Lose:</b>  <span id='winlose'></span><br>
-        
-    <b>Kills / Deaths / Assists:</b> <span id='kills'> </span> / <span id='deaths'> </span> / <span id='assists'> </span>
-    <br>
-    <b>KDA: </b> <span id='kda'> </span>   <br>
+    <div class="lastGame-container"><b>Your latest game information:</b><br><br>
+        <b>Win/Lose:</b>  <span id='winlose'></span><br>
+            
+        <b>Kills / Deaths / Assists:</b> <span id='kills'> </span> / <span id='deaths'> </span> / <span id='assists'> </span>
+        <br>
+        <b>KDA: </b> <span id='kda'> </span>   <br>
 
+    </div>
+
+    <br>
+    
     <button id="testpage" onclick="location.href='testPage.html';">Click me!</button>
     
 </body>
 
-
+<script src="script.js"></script>
 </html>
