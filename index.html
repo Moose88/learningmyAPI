@@ -15,10 +15,12 @@
 
 <body>
     <div class="league-container">
-                Region: <input type="radio" id="region" value="0" checked>NA <input type="radio" id="region" value="1">EUW <input type="radio" id="region" value="2">EUN<br>
-                Summoner Name: <input type="text" id="inputBox" value="Majestic Moose"></input></br>
-                <input type="submit" id="submit" onclick="getLeagueData()"></input>
-    </div>
+        <form name="regionForm">
+            Region: <input type="radio" name="region" value="0" checked>NA <input type="radio" name="region" value="1">EUW <input type="radio" name="region" value="2">EUN
+        </form><br>
+            Summoner Name: <input type="text" id="inputBox" value="Majestic Moose"></input></br>
+            <input type="submit" id="submit" ></input>
+    </Region:>
 
     <br>
 
@@ -49,5 +51,6 @@
     
 </body>
 
-<script src="script.js"></script>
+<script src="script.js" type="module"></script>
+<script src="apiCall.js" type="module"></script>
 </html>
