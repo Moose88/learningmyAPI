@@ -16,9 +16,9 @@ async function getLeagueData(name, regionSelected) {
 
   try{
     let newAPI = await new apiBuilder(api_key, name, regionSelected);
-    let summoner = await summSearch(newAPI.name, newAPI.apiKey, newAPI.regionSelected).then(function(data){
-      console.log("Got summoner:", data);
-    });
+    let summoner = await summSearch(newAPI.name, newAPI.apiKey, newAPI.regionSelected);
+    // Freeze the summoner object so it can't be modified after creation.
+    Object.freeze(summoner);
     return summoner;
 
   } catch(e){
@@ -27,6 +27,7 @@ async function getLeagueData(name, regionSelected) {
 
 }
 
+// Runs when enter is pressed
 document.getElementById('inputBox').addEventListener("keydown", function(e) {
   if (!e) { var e = window.event; }
 
@@ -46,6 +47,7 @@ document.getElementById('inputBox').addEventListener("keydown", function(e) {
   }
 }, false);
 
+// Runs when the submit button is pressed
 document.getElementById('submit').addEventListener("mousedown", e =>{
   if(!e){var e = window.event;}
   e.preventDefault();
