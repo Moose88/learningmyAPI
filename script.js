@@ -1,17 +1,14 @@
+/*
+
+script.js
+
+This is the main script that handles the html interactions of the front.
+
+*/
+
 import { apiBuilder } from './apiCall.js';
 import { summSearch } from './apiCall.js';
 
-// let regionList = ['na1.', 'euw1.', 'eun1.'];
-
-// var summoner;
-// var latestMatchInformation;
-// var participationInformation;
-// const api = 'api.riotgames.com';
-// const proxeurl = 'https://cors-anywhere.herokuapp.com/https://';
-// let api_summ = '/lol/summoner/v4/summoners/by-name/';
-// let api_match = '/lol/match/v4/matchlists/by-account/';
-// let api_matches = '/lol/match/v4/matches/';
-// let api_timeline = '/lol/match/v4/timelines/by-match/';
 let api_key = 'RGAPI-2424a9e4-2106-488b-90e3-78727b06263a';
 var regionSelected;
 
