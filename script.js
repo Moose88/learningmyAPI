@@ -8,24 +8,46 @@ This is the main script that handles the html interactions of the front.
 
 import { apiBuilder } from './apiCall.js';
 import { summSearch } from './apiCall.js';
+import { gameList } from './apiCall.js';
 
-let api_key = 'RGAPI-2424a9e4-2106-488b-90e3-78727b06263a';
+let api_key = 'RGAPI-7c37883f-4fd4-43cc-acf3-61b1468985f7';
 var regionSelected;
 
-async function getLeagueData(name, regionSelected) {
+async function main(name, regionSelected){
+  let newAPI = await new apiBuilder(api_key, name, regionSelected);
+  let summoner = await getLeagueData(newAPI);
+  
+  
+  alert("Built summoner.");
+  console.log(summoner);
 
+  let matchData = await getMatchList(summoner, newAPI);
+  alert("Got match data.");
+  console.log(matchData);
+
+}
+
+async function getLeagueData(newAPI) {
   try{
-    let newAPI = await new apiBuilder(api_key, name, regionSelected);
-    let summoner = await summSearch(newAPI.name, newAPI.apiKey, newAPI.regionSelected);
     // Freeze the summoner object so it can't be modified after creation.
-    Object.freeze(summoner);
-    return summoner;
+    return Object.freeze(await summSearch(newAPI.name, newAPI.apiKey, newAPI.regionSelected));
 
   } catch(e){
     console.log(e.message);
   }
 
 }
+
+async function getMatchList(summoner, newAPI){
+  try{
+    // Freeze the summoner object so it can't be modified after creation.
+    return Object.freeze(await gameList(summoner.accountId, newAPI.apiKey, newAPI.regionSelected));
+
+  } catch(e){
+    console.log(e.message);
+  }
+}
+
 
 // Runs when enter is pressed
 document.getElementById('inputBox').addEventListener("keydown", function(e) {
@@ -42,7 +64,7 @@ document.getElementById('inputBox').addEventListener("keydown", function(e) {
     let name = encodeURIComponent(document.getElementById('inputBox').value);
     console.log(name);  
 
-    getLeagueData(name, regionSelected).then(summoner => console.log(summoner));
+    main(name, regionSelected);
 
   }
 }, false);
@@ -59,57 +81,15 @@ document.getElementById('submit').addEventListener("mousedown", e =>{
 
   let name = encodeURIComponent(document.getElementById('inputBox').value);
   console.log(name);  
-  getLeagueData(name, regionSelected).then(summoner => console.log(summoner));
+
+  main(name, regionSelected);
 }, false);
 
 
 
 
 
-// function gameList(acctId){
 
-//     axios.get(proxeurl + regionSelected + api + api_match + acctId + api_key)
-//     .then(function(received){
-
-//         /*
-//         lane	string	
-//         gameId	long	
-//         champion	int	
-//         platformId	string	
-//         season	int	
-//         queue	int	
-//         role	string	
-//         timestamp	long
-//         */
-//         console.log(received.data.matches[0]);
-//         var obj = JSON.stringify(received.data.matches[0], undefined, 2);
-//         document.getElementById('match-hist').innerText = obj;
-        
-//         console.log();
-
-//         latestMatchInformation = {
-//             platformId: received.data.matches[0].platformId,
-//             gameId: received.data.matches[0].gameId,
-//             champion: received.data.matches[0].champion,
-//             queue: received.data.matches[0].queue,
-//             season: received.data.matches[0].season,
-//             timestamp: received.data.matches[0].timestamp,
-//             role: received.data.matches[0].role,
-//             lane: received.data.matches[0].lane
-//         };
-
-//         if(latestMatchInformation.role != "JUNGLE")
-//             alert("You're not the jungler!");
-        
-//         printGameInfo(latestMatchInformation);
-
-//         getSummonerMatchInfo(latestMatchInformation);
-//     })
-//     .catch(function(err){
-//         console.log('Failed: ' + err);
-//         alert('Failed to get data: ' + err);
-//     });
-// }
 
 //     /*
 //     seasonId	int	Please refer to the Game Constants documentation.

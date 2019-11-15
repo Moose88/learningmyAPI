@@ -40,9 +40,45 @@ export function summSearch(name, apiKey, regionSelected) {
     .catch(function(err){
       rej(err);
     });
+  }); 
+}
 
+export function gameList(acctId, apiKey, regionSelected){
+  return new Promise(function(res, rej){
+    axios.get(proxeurl + regionSelected + api + match + acctId + apiKey)
+    .then(function(received){
+
+      /*
+      lane	string	
+      gameId	long	
+      champion	int	
+      platformId	string	
+      season	int	
+      queue	int	
+      role	string	
+      timestamp	long
+      */
+      console.log(received.data.matches[0]);
+      var obj = JSON.stringify(received.data.matches[0], undefined, 2);
+      document.getElementById('match-hist').innerText = obj;
+
+      let latestMatchInformation = {
+          platformId: received.data.matches[0].platformId,
+          gameId: received.data.matches[0].gameId,
+          champion: received.data.matches[0].champion,
+          queue: received.data.matches[0].queue,
+          season: received.data.matches[0].season,
+          timestamp: received.data.matches[0].timestamp,
+          role: received.data.matches[0].role,
+          lane: received.data.matches[0].lane
+      };
+
+      res(latestMatchInformation);
+    })
+    .catch(function(err){
+      rej(err);
+    });
   });
-  
 }
 
 export function apiBuilder(apiKey, name, regionVal){
